@@ -1,0 +1,20 @@
+<md-card class="app-input-section">
+    <h3>Pipe calculator</h3>
+    <p>This is a simple example showing how reasoning can make implicit data explicit by the use of reasoning. No hard coded calculations are used as it is all defined as rules in the model.</p>
+</md-card>
+
+<md-card class="app-input-section">
+    <md-slide-toggle color="primary" [checked]="schemaQuery.reasoning" (change)="toggleReasoning($event)">Reasoning</md-slide-toggle>
+    <hr/>
+    <!--Input fields for all pipe properties defined in schema-->
+        
+        <md-input 
+            *ngFor="let item of schemaData?.results.bindings | labled" 
+            placeholder="{{item?.label ? item?.label.value : item?.property.value}}"
+            dividerColor="accent"
+            value="{{item?.val ? item?.val.value : '' }}"
+            name="{{item?.property.value}}"
+            (keyup)="update($event)"
+        >
+        </md-input>
+</md-card>
