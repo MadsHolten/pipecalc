@@ -22,8 +22,8 @@ export class TriplestoreService {
     // Query the triple-store
     getQueryResult(args:Query) {
         let headers = new Headers();
-        headers.append('Authorization', this.auth);
-        headers.append('Accept', args.accept ? args.accept : 'application/sparql-results+json'); // Defaults to return json
+        headers.append('authorization', this.auth);
+        headers.append('accept', args.accept ? args.accept : 'application/sparql-results+json'); // Defaults to return json
 
         let params = new URLSearchParams();
         params.set('reasoning', args.reasoning ? 'true' : 'false'); // Convert boolean to string
@@ -38,21 +38,23 @@ export class TriplestoreService {
 
     update(args:UpdateTriple) {
         let headers = new Headers();
-        headers.append('Authorization', this.auth);
-        headers.append('Content-Type', 'application/x-www-form-urlencoded');
-        headers.append('Accept', args.accept ? args.accept : 'text/boolean'); // Defaults to return json
+        headers.append('authorization', this.auth);
+        headers.append('content-type', 'application/x-www-form-urlencoded');
+        headers.append('accept', args.accept ? args.accept : 'text/boolean'); // Defaults to return json
 
-        var query = `DELETE { p:pipeA `+args.property+` ?oldVal } 
-                     INSERT { p:pipeA `+args.property+` '+args.newVal+' } 
-                     WHERE { p:pipeA `+args.property+` ?oldVal }`
+        var query = `DELETE { p:pipeA <`+args.property+`> ?oldVal } 
+                     INSERT { p:pipeA <`+args.property+`> `+args.newVal+` } 
+                     WHERE { p:pipeA <`+args.property+`> ?oldVal }`;
 
         let params = new URLSearchParams();
         params.set('query', query);
 
         let options = new RequestOptions({ headers: headers, search: params });
+        console.log(options);
+        console.log(options.search.paramsMap);
         return this._http
-            .post(this.queryUrl + '/'+args.db+'/query', options)
-            //.map((res: Response) => res.json())
+            .get(this.queryUrl + '/'+args.db+'/query', options)
+            .map((res: Response) => res.json())
             .catch(this.handleError);
     }
 

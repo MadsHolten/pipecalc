@@ -14,7 +14,16 @@
             dividerColor="accent"
             value="{{item?.val ? item?.val.value : '' }}"
             name="{{item?.property.value}}"
-            (keyup)="update($event)"
+            (keyup.enter)="updateProperty($event)"
         >
         </md-input>
+</md-card>
+
+<!--Error-->
+<md-card class="app-input-section" *ngIf="errorMessage">
+    <p class="error">{{errorMessage}}</p>
+</md-card>
+
+<md-card class="app-input-section" *ngIf="errorMessage">
+    <p>{{schemaData?.results.bindings | json}}</p>
 </md-card>

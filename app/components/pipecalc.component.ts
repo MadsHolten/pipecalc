@@ -36,6 +36,13 @@ export class PipeCalcComponent implements OnInit {
         reasoning: false
     }
 
+    // Triple to update
+    updateQuery: UpdateTriple = {
+        db: this.db,
+        property: '',
+        newVal: ''
+    }
+
     schemaData:     Observable<string[]>;
     errorMessage:   string;
     updateTriple:   UpdateTriple[];
@@ -44,11 +51,11 @@ export class PipeCalcComponent implements OnInit {
     constructor( private _queryService: TriplestoreService) { }
 
     ngOnInit() {
-        // Get schema
+        // Get schema and pipe data
         this._queryService.getQueryResult(this.schemaQuery)
             .subscribe(
                 res => this.schemaData = res,
-                error =>  console.log(<any>error));
+                error =>  this.errorMessage = error);
     }
 
     toggleReasoning(){
@@ -58,24 +65,46 @@ export class PipeCalcComponent implements OnInit {
     }
 
     refreshData() {
+        // Refresh schema and pipe data
         this._queryService.getQueryResult(this.schemaQuery)
             .subscribe(
                 res => this.schemaData = res,
-                error =>  console.log(<any>error));
+                error =>  this.errorMessage = error);
     }
     
-    update(event:any){
+    updateProperty(event:any) {
+        // Recieve changed data and update the queryUpdate object
+        this.updateQuery.property = event.target.name;
+        this.updateQuery.newVal = event.target.value;
 
-        var db = this.db;
-        var property = event.target.name;
-        var newVal = event.target.value;
+        // Filter schemaData to get existing values
+        var exist = this.schemaData.results.bindings.filter(x => x.property.value == this.updateQuery.property);
 
-        console.log(db, property, newVal);
+        // Check if property is defined. If defined, return exisitng value
+        var existVal = exist[0].val ? exist[0].val : null;
 
-    // this._queryService.update(db:string, property:string, newVal:string)
-    //         .subscribe(
-    //             res => console.log(res),
-    //             error =>  console.log(<any>error));
-    // }
+        // Check if input is empty. If empty and input defined, it is a delete request
+        var emptyVal = (event.target.value == '') ? true : false ;
+
+        // If empty and no existing value, do nothing
+        if (emptyVal && !existVal) return;
+
+        // If empty and exisiting val, delete value
+        
+
+        console.log(existVal, emptyVal);
+
+        // // Call service to update triple in database
+        // this._queryService.update(this.updateQuery)
+        //     .subscribe(
+        //         res => null,
+        //         error =>  {
+        //             console.log(<any>error);
+        //             this.errorMessage = error;
+        //         });
+
+        // // Return fresh data
+        // this.refreshData();
+    }
 
 }
