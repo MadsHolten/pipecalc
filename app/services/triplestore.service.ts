@@ -3,7 +3,7 @@ import { Http, Headers, Response, URLSearchParams, RequestOptions } from '@angul
 
 import { Observable }   from 'rxjs/Observable';
 
-import { Query, UpdateTriple } from './triplestore.interface';
+import { Query, UpdateTriple, SchemaData } from './triplestore.interface';
 
 @Injectable()
 export class TriplestoreService {
@@ -24,6 +24,7 @@ export class TriplestoreService {
         let headers = new Headers();
         headers.append('authorization', this.auth);
         headers.append('accept', args.accept ? args.accept : 'application/sparql-results+json'); // Defaults to return json
+        headers.append('content-type', args.contentType ? args.contentType : null);
 
         let params = new URLSearchParams();
         params.set('reasoning', args.reasoning ? 'true' : 'false'); // Convert boolean to string
@@ -36,7 +37,7 @@ export class TriplestoreService {
             .catch(this.handleError);
     }
 
-    update(args:UpdateTriple) {
+    updateTriple(args:UpdateTriple) {
         let headers = new Headers();
         headers.append('authorization', this.auth);
         headers.append('content-type', 'application/x-www-form-urlencoded');

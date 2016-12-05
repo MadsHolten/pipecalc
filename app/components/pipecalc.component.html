@@ -24,6 +24,6 @@
     <p class="error">{{errorMessage}}</p>
 </md-card>
 
-<md-card class="app-input-section" *ngIf="errorMessage">
-    <p>{{schemaData?.results.bindings | json}}</p>
+<md-card class="app-input-section">
+    <p class="error">{{schemaData | json}}</p>
 </md-card>
