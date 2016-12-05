@@ -1,8 +1,9 @@
 import { Component, OnInit }    from '@angular/core';
 import { Observable }           from 'rxjs/Observable';
 
+import { MdSnackBar }           from '@angular/material';
 import { TriplestoreService }   from '../services/triplestore.service';
-import { Query, UpdateTriple, SchemaData }  from '../services/triplestore.interface';
+import { Query, SchemaData }    from '../services/triplestore.interface';
 
 @Component({
     moduleId: module.id,
@@ -46,15 +47,20 @@ export class PipeCalcComponent implements OnInit {
     }
 
     schemaData:     Observable<any>;
-    errorMessage:   string;
-    updateTriple:   UpdateTriple[];
 
     // Inject private instance of TriplestoreService into constructor
-    constructor( private _queryService: TriplestoreService) { }
+    constructor( 
+        private _queryService: TriplestoreService,
+        private _snackbar: MdSnackBar 
+    ) { }
 
     ngOnInit(){
         // Get schema and pipe data
         this.refreshData();
+    }
+
+    showError(error:string) {
+        this._snackbar.open(error, 'CLOSE');
     }
 
     refreshData() {
@@ -62,7 +68,7 @@ export class PipeCalcComponent implements OnInit {
         this._queryService.getQueryResult(this.schemaQuery)
             .subscribe(
                 res => this.schemaData = res,
-                error =>  this.errorMessage = error);
+                error =>  this.showError(error));
         console.log('Refreshed data');
     }
 
@@ -80,7 +86,7 @@ export class PipeCalcComponent implements OnInit {
                     console.log(res);
                     this.refreshData();
                 },
-                error =>  this.errorMessage = error);
+                error =>  this.showError(error));
     }
     
     updateProperty(event:any) {

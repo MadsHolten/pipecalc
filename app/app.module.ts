@@ -8,16 +8,28 @@ import './rxjs-extensions';
 import 'hammerjs';
 
 // COMPONENTS
-import { AppComponent }       from './app.component';
-import { PipeCalcComponent }  from './components/pipecalc.component'
+import { AppComponent }         from './app.component';
+import { PipeCalcComponent }    from './components/pipecalc.component'
+import { NamedGraphsComponent } from './components/namedgraphs.component'
 
 // PIPES
 import { LabledPipe }   from './pipes/labled.pipe';
 
 
 @NgModule({
-  imports:      [ BrowserModule, HttpModule, MaterialModule.forRoot() ],
-  declarations: [ AppComponent, PipeCalcComponent, LabledPipe ],
-  bootstrap:    [ AppComponent ]
+  imports: [ 
+      BrowserModule, 
+      HttpModule, 
+      MaterialModule.forRoot() 
+    ],
+  declarations: [ 
+      AppComponent, 
+      PipeCalcComponent,
+      NamedGraphsComponent,
+      LabledPipe 
+    ],
+  bootstrap: [ 
+      AppComponent 
+    ]
 })
 export class AppModule { }

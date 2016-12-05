@@ -6,14 +6,14 @@ export interface Query {
   reasoning: boolean;
 }
 
-export interface UpdateTriple {
-  accept?: string;
-  db: string;
-  property: string;
-  newVal: string;
-  oldVal?: string;
+export class Ontologies {
+  id: string;
+  name: string;
+  graphUrl: string;
+  docUrl: string;
+  baseUri: string;
+  dependencies?: string[];
 }
-
 
 // Interface for schemaData
 export interface Head {
