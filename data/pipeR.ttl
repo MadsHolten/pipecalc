@@ -1,0 +1,109 @@
+@prefix rule:   <tag:stardog:api:context:all:rule:> .
+@prefix po:     <http://www.example.com/pipeOnt#> .
+@prefix p:      <http://www.example.com/pipe#> .
+
+@prefix rdf:    <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:   <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl:    <http://www.w3.org/2002/07/owl#> .
+@prefix xsd:    <http://www.w3.org/2001/XMLSchema#> .
+
+##########
+# RULES
+##########
+
+# Outer diameter from inner diameter and material thickness
+[] a rule:SPARQLRule ;
+    rdfs:label "Regel";
+    rule:content """
+        PREFIX :<urn:test:>
+            IF {
+                ?p a po:Pipe ;
+                    po:innerDiameter ?di ;
+                    po:materialThickness ?t
+                BIND (2 * ?t + ?di AS ?do)
+            }
+            THEN {
+                ?p po:outerDiameter ?do
+            }""".
+
+# Inner diameter from outer diameter and material thickness
+[] a rule:SPARQLRule ;
+    rule:content """
+        PREFIX :<urn:test:>
+            IF {
+                ?p a po:Pipe ;
+                    po:outerDiameter ?do ;
+                    po:materialThickness ?t
+                BIND (?do - (2*?t) AS ?di)
+            }
+            THEN {
+                ?p po:innerDiameter ?di
+            }""".
+
+# Inner radius from inner diameter
+[] a rule:SPARQLRule ;
+    rule:content """
+        PREFIX :<urn:test:>
+            IF {
+                ?p a po:Pipe ;
+                    po:innerDiameter ?d
+                BIND (?d/2 AS ?r)
+            }
+            THEN {
+                ?p po:innerRadius ?r
+            }""".
+
+# Outer radius from outer diameter
+[] a rule:SPARQLRule ;
+    rule:content """
+        PREFIX :<urn:test:>
+            IF {
+                ?p a po:Pipe ;
+                    po:outerDiameter ?d
+                BIND (?d/2 AS ?r)
+            }
+            THEN {
+                ?p po:outerRadius ?r
+            }""".
+
+# Net area
+[] a rule:SPARQLRule ;
+    rule:content """
+        PREFIX :<urn:test:>
+        PREFIX math: <http://www.w3.org/2005/xpath-functions/math#>
+            IF {
+                ?p a po:Pipe ;
+                    po:innerRadius ?r
+                BIND (math:pi() * math:pow(?r, 2) AS ?a)
+            }
+            THEN {
+                ?p po:netArea ?a
+            }""".
+
+# Gross area
+[] a rule:SPARQLRule ;
+    rule:content """
+        PREFIX :<urn:test:>
+        PREFIX math: <http://www.w3.org/2005/xpath-functions/math#>
+            IF {
+                ?p a po:Pipe ;
+                    po:outerRadius ?r .
+                BIND (math:pi() * math:pow(?r, 2) AS ?a)
+            }
+            THEN {
+                ?p po:grossArea ?a .
+            }""".
+
+# Fluid velocity
+[] a rule:SPARQLRule ;
+    rule:content """
+        PREFIX :<urn:test:>
+            IF {
+                ?p a po:Pipe ;
+                    po:fluidVolumeFlow ?f ;
+                    po:netArea ?a
+                BIND (?f / ?a AS ?vel)
+            }
+            THEN {
+                ?p po:fluidVelocity ?vel
+            }""".

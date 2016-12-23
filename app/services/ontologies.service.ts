@@ -88,5 +88,23 @@ export const ExtOnts: Ontologies[] = [
         graphUrl: 'http://www.student.dtu.dk/~mhoras/bot/ontology.ttl', 
         docUrl: 'http://www.student.dtu.dk/~mhoras/bot/index-en.html',
         baseUri: 'http://linkedbuildingdata.net/bot'
+    },
+    {   id: 'pipe_r', 
+        name: 'Pipe ontology RBox', 
+        graphUrl: 'https://dl.dropboxusercontent.com/u/4549957/pipeR.ttl', 
+        docUrl: '',
+        baseUri: 'http://www.example.com/pipeOnt'
+    },
+    {   id: 'pipe_t', 
+        name: 'Pipe ontology TBox', 
+        graphUrl: 'https://dl.dropboxusercontent.com/u/4549957/pipeT.ttl', 
+        docUrl: '',
+        baseUri: 'http://www.example.com/pipeOnt'
+    },
+    {   id: 'hvac', 
+        name: 'HVAC ontology TBox', 
+        graphUrl: 'https://dl.dropboxusercontent.com/u/4549957/hvacT.ttl', 
+        docUrl: '',
+        baseUri: 'http://www.example.com/hvacOnt'
     }
 ];

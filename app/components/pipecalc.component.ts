@@ -28,12 +28,23 @@ export class PipeCalcComponent implements OnInit {
     schemaQuery: Query = {
         db: this.db,
         query: `
-            SELECT DISTINCT * WHERE {
-	        ?property rdfs:domain po:Pipe .
-  	        OPTIONAL { ?property rdfs:label ?label }
-            OPTIONAL { p:pipeA ?property ?val }
-            }
-            ORDER BY ASC(?label)`,
+            SELECT DISTINCT * 
+            WHERE {
+                ?property rdfs:domain po:Pipe .
+                OPTIONAL { ?property rdfs:label ?dk_label .
+                    FILTER (LANG(?dk_label) = "da")
+                }
+                OPTIONAL { ?property rdfs:label ?en_label .
+                    FILTER (LANG(?en_label) = "en")
+                }
+                OPTIONAL { ?property rdfs:comment ?dk_comment 
+                    FILTER (LANG(?dk_comment) = "da")
+                }
+                OPTIONAL { ?property rdfs:comment ?en_comment 
+                    FILTER (LANG(?dk_comment) = "en")
+                }
+                OPTIONAL { p:pipeA ?property ?val }
+            }`,
         reasoning: false
     }
 
@@ -108,7 +119,7 @@ export class PipeCalcComponent implements OnInit {
                 return;
             } else {
                 // If there was an existing value, this value should be deleted
-                this.updateQuery.query = `DELETE WHERE { p:pipeA <`+key+`> `+existVal+` }`;
+                this.updateQuery.query = `DELETE DATA { p:pipeA <`+key+`> `+existVal+` }`;
                 this.performUpdate();
                 console.log('Performed deletion query');
             }

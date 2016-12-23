@@ -9,9 +9,9 @@
         
         <md-input 
             *ngFor="let item of schemaData?.results.bindings | labled" 
-            placeholder="{{item?.label ? item?.label.value : item?.property.value}}"
+            placeholder="{{item?.en_label ? item?.en_label.value : item?.property.value}}"
             dividerColor="accent"
-            value="{{item?.val ? item?.val.value : '' }}"
+            value="{{item?.val ? (item?.val.value | number:'.0-2') : ''}}"
             name="{{item?.property.value}}"
             (keyup.enter)="updateProperty($event)"
         >

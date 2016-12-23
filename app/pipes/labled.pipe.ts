@@ -7,6 +7,6 @@ export class LabledPipe implements PipeTransform {
       if (!items) return [];
       
       //Only return items with a label
-      return items.filter( item => item['label']);
+      return items.filter( item => item['dk_label']);
   }
 }
